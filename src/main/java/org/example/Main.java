@@ -5,7 +5,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Main {
     public static void main(String[] args) {
@@ -18,21 +24,35 @@ public class Main {
 
         List<Cliente> clientes = List.of(cliente1, cliente2, cliente3);
 
+        // Crear ExecutorService para manejar el hilo
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
         // Leer el archivo de cuentas y asignar cuentas a clientes
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/cuentas.txt"));
-            lines.forEach(line -> {
-                Cuenta cuenta = parseCuenta(line);
+            List<Future<Cuenta>> futures = new ArrayList<>();
+
+            for (String line : lines) {
+                Callable<Cuenta> task = () -> parseCuenta(line);
+                Future<Cuenta> future = executor.submit(task);
+                futures.add(future);
+            }
+
+            for (Future<Cuenta> future : futures) {
+                Cuenta cuenta = future.get();  // Obtener la cuenta creada por el hilo
                 if (cuenta != null) {
-                    int clienteNumero = obtenerClienteNumero(line);
+                    int clienteNumero = cuenta.getNumero();
                     clientes.stream()
                             .filter(cliente -> cliente.getNumero() == clienteNumero)
                             .findFirst()
                             .ifPresent(cliente -> cliente.agregarCuenta(cuenta));
                 }
-            });
-        } catch (IOException e) {
+            }
+
+        } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
+        } finally {
+            executor.shutdown();
         }
 
         // Validar que cada cliente tenga sus respectivas cuentas
@@ -86,8 +106,4 @@ public class Main {
         }
     }
 
-    private static int obtenerClienteNumero(String line) {
-        String[] parts = line.split("\\[|,|\\]");
-        return Integer.parseInt(parts[5].trim());
-    }
 }
