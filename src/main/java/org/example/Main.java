@@ -42,7 +42,7 @@ public class Main {
                 Cuenta cuenta = future.get();  // Obtener la cuenta creada por el hilo
                 if (cuenta != null) {
                     int clienteNumero = cuenta.getNumero();
-                    clientes.stream()
+                    clientes.parallelStream()
                             .filter(cliente -> cliente.getNumero() == clienteNumero)
                             .findFirst()
                             .ifPresent(cliente -> cliente.agregarCuenta(cuenta));

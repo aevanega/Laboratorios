@@ -1,5 +1,21 @@
 
 ›
-java:S1210Š"YOverride "equals(Object obj)" to comply with the contract of the "compareTo(T o)" method.(Ü¦Î™ıÿÿÿÿJ$d069de7c-c654-41f4-98a8-37a675b91d17
-k	java:S106u"+Replace this use of System.out by a logger.(”èë–øÿÿÿÿJ$cea0f41c-fe46-4f1b-b1e7-634783263668
-l	java:S106€"+Replace this use of System.out by a logger.(”èë–øÿÿÿÿJ$8a895648-8bfa-4951-9226-593c2bd66b76
+java:S1210Š"YOverride "equals(Object obj)" to comply with the contract of the "compareTo(T o)" method.(Ü¦Î™ıÿÿÿÿJ$2a530c11-d13f-4b90-83e9-5bc33a98fdda
+}
+java:S1161'":Add the "@Override" annotation above this method signature(•ß½8ÏÁ÷€2J$0f4f94d0-47f7-46e3-82fb-b60e457ef6da
+}
+java:S1161+":Add the "@Override" annotation above this method signature(™ê´œ8ÏÁ÷€2J$1ba16981-30a1-4b4c-98fc-64558e7eaa6a
+‚
+java:S1161/":Add the "@Override" annotation above this method signature(¹Åò«ıÿÿÿÿ8ĞÁ÷€2J$7b7d321a-b1e7-42dc-bd38-64075b7664f4
+‚
+java:S11613":Add the "@Override" annotation above this method signature(Á¨‡şÿÿÿÿ8ĞÁ÷€2J$683ae0be-699d-42bb-a384-84c898b1881e
+‚
+java:S11617":Add the "@Override" annotation above this method signature(ìë¶·úÿÿÿÿ8ÑÁ÷€2J$25a7eaee-2396-489e-a248-0810b2bba0b6
+‚
+java:S1161;":Add the "@Override" annotation above this method signature( »¯Òùÿÿÿÿ8ÑÁ÷€2J$73242396-48e8-4921-8a8a-25f58cdae4a5
+}
+java:S1161?":Add the "@Override" annotation above this method signature(‡ï´8ÒÁ÷€2J$d238823a-eda9-4b57-8594-8d950429da7a
+‚
+java:S1161C":Add the "@Override" annotation above this method signature(Ã×¦«ûÿÿÿÿ8ÒÁ÷€2J$cccfe9be-f12c-4225-8d01-39292661f0aa
+k	java:S106u"+Replace this use of System.out by a logger.(”èë–øÿÿÿÿJ$66f7ccd4-bf92-41c1-9a88-30fe563cc7b2
+l	java:S106€"+Replace this use of System.out by a logger.(”èë–øÿÿÿÿJ$1e0e2d03-3475-4491-ab2d-10a3b3e3e8fd

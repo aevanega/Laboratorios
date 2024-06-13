@@ -109,7 +109,7 @@ public class Cliente extends Banco implements ServicioCuentas, Comparable<Client
 
     @Override
     public void abonarCuenta(Integer numero, Double abono) {
-        cuentas.stream()
+        cuentas.parallelStream()
                 .filter(cuenta -> cuenta.getNumero().equals(numero))
                 .findFirst()
                 .ifPresentOrElse(
@@ -120,7 +120,7 @@ public class Cliente extends Banco implements ServicioCuentas, Comparable<Client
 
     @Override
     public void retirar(Integer numero, Double retiro) {
-        cuentas.stream()
+        cuentas.parallelStream()
                 .filter(cuenta -> cuenta.getNumero().equals(numero))
                 .findFirst()
                 .ifPresentOrElse(

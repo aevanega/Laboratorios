@@ -11,3 +11,5 @@ V
 &src/main/java/org/example/Cliente.java,1\3\13bcc8b8ece17bfd40033ef485dd95f5f52e445b
 ?
 src/cuentas.txt,9\4\9458e2660d4efb00aa1c31b7be490505bfaf5ec4
+T
+$src/main/java/org/example/Banco.java,5\7\57c8c22a1b62a9c1e9423df383eaea9fbcb2d1b4
