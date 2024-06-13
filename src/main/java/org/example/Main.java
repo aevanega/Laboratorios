@@ -1,17 +1,12 @@
 package org.example;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,35 +19,44 @@ public class Main {
 
         List<Cliente> clientes = List.of(cliente1, cliente2, cliente3);
 
-        // Crear ExecutorService para manejar el hilo
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        // Conexión a la base de datos y extracción de cuentas
+        String url = "jdbc:mysql://localhost:3306/practica12";
+        String user = "root";
+        String password = "1234"; // Reemplazar con la contraseña de tu base de datos
 
-        // Leer el archivo de cuentas y asignar cuentas a clientes
-        try {
-            List<String> lines = Files.readAllLines(Paths.get("src/cuentas.txt"));
-            List<Future<Cuenta>> futures = new ArrayList<>();
 
-            for (String line : lines) {
-                Callable<Cuenta> task = () -> parseCuenta(line);
-                Future<Cuenta> future = executor.submit(task);
-                futures.add(future);
-            }
+        try (Connection connection = DriverManager.getConnection(url, user, password);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery("SELECT * FROM cuentas")) {
 
-            for (Future<Cuenta> future : futures) {
-                Cuenta cuenta = future.get();  // Obtener la cuenta creada por el hilo
-                if (cuenta != null) {
-                    int clienteNumero = cuenta.getNumero();
-                    clientes.parallelStream()
-                            .filter(cliente -> cliente.getNumero() == clienteNumero)
-                            .findFirst()
-                            .ifPresent(cliente -> cliente.agregarCuenta(cuenta));
+            while (resultSet.next()) {
+                int numero = resultSet.getInt("numero");
+                String fecha = resultSet.getString("fecha");
+                double saldo = resultSet.getDouble("saldo");
+                double interes = resultSet.getDouble("interes");
+                int clienteNumero = resultSet.getInt("cliente");
+                String tipoCuenta = resultSet.getString("tipoCuenta");
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                LocalDate fechaApertura = LocalDate.parse(fecha, formatter);
+
+                Cuenta cuenta;
+                if ("CA".equals(tipoCuenta)) {
+                    cuenta = new CuentaDeAhorro(numero, saldo, interes);
+                } else {
+                    cuenta = new CuentaDeCheque(numero, saldo, interes);
                 }
-            }
+                cuenta.setFechaApertura(fechaApertura);
+                cuenta.setNumero(clienteNumero);
 
-        } catch (IOException | InterruptedException | ExecutionException e) {
+                // Asignar cuenta al cliente correspondiente
+                clientes.parallelStream()
+                        .filter(cliente -> cliente.getNumero() == clienteNumero)
+                        .findFirst()
+                        .ifPresent(cliente -> cliente.agregarCuenta(cuenta));
+            }
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            executor.shutdown();
         }
 
         // Validar que cada cliente tenga sus respectivas cuentas
@@ -62,48 +66,6 @@ public class Main {
                 System.out.println(cuenta);
             }
         });
-    }
-
-    private static Cuenta parseCuenta(String line) {
-        if (line == null || line.trim().isEmpty()) {
-            return null;
-        }
-
-        // Verificar que la línea tiene al menos la longitud mínima esperada
-        if (line.length() < 2) {
-            return null;
-        }
-
-        String tipoCuenta = line.substring(0, 2);
-        String cleanedLine = line.substring(2).replaceAll("[\\[\\]]", "");
-        String[] parts = cleanedLine.split(",\\s*");
-
-        // Verificar que hay suficientes partes en la línea
-        if (parts.length < 5) {
-            return null;
-        }
-
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            Integer numero = Integer.parseInt(parts[0].trim());
-            LocalDate fechaApertura = LocalDate.parse(parts[1].trim(),formatter);
-            Double saldo = Double.parseDouble(parts[2].trim());
-            Double interes = Double.parseDouble(parts[3].trim());
-            Integer clienteNumero = Integer.parseInt(parts[4].trim());
-
-            Cuenta cuenta;
-            if (tipoCuenta.equals("CA")) {
-                cuenta = new CuentaDeAhorro(numero, saldo, interes);
-            } else {
-                cuenta = new CuentaDeCheque(numero, saldo, interes);
-            }
-            cuenta.setFechaApertura(fechaApertura);
-            cuenta.setNumero(clienteNumero);
-            return cuenta;
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
 }

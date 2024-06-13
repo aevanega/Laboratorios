@@ -1,5 +1,7 @@
 
-¡
-java:S21424"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(À¤í¤8¸€ô€2J$bdcbf92e-6df5-4473-ac36-ae3a4884d56c
-m	java:S106<"+Replace this use of System.out by a logger.(Ã¤ÖÚ8É€ùó€2J$9a41f87d-b326-4fea-ad51-3e407c55d2c5
-l	java:S106>"+Replace this use of System.out by a logger.(ÎÊg8Ê€ùó€2J$323fadf6-6a26-4540-bf25-9fa1f1023209
+~
+java:S6437"6Revoke and change this password, as it is compromised.(‹ÂÒ²ùÿÿÿÿ8‰½„ø€2J$b8ac6840-41d5-4a72-b8ad-ff5b29e94091
+b
+java:S6905"Don't use the query "SELECT *".(Ëšáÿ8Šß„ø€2J$7f6a9120-250e-42da-9e48-6edb7a9eacf2
+m	java:S106@"+Replace this use of System.out by a logger.(Ã¤ÖÚ8ş²ƒø€2J$81112156-610a-4089-8541-5b4b2cdeaaf3
+l	java:S106B"+Replace this use of System.out by a logger.(ÎÊg8ÿ²ƒø€2J$6a003ea1-6499-4896-bc20-da56a951d977
